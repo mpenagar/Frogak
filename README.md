@@ -5,6 +5,11 @@ Honako errepositorio hau frogak egiteko erabilia izango da.
 
 Ea nola dabilen...
 
+Edukia
+======
+
+   * [FirstExample](python/notebooks/FirstExample.ipynb): Python-eko notebook baten adibidea
+
 
 
 License
