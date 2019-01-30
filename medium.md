@@ -1,140 +1,339 @@
-# Printing Medium stories
+# What are Eigenvalues and Eigenvectors?
 
-## ❦
+## A must-know concept for Machine Learning
 
-> On the other hand, cheap, rough paper with a beautifully set textblock hanging
-> just so on the page makes those in the know, smile (and those who don’t, feel
-welcome). It says: We may not have had the money to print on better paper, but
-man, we give a shit. Giving a shit does not require capital, simply attention
-and humility and diligence. Giving a shit is the best feeling you can imbue
-craft with. Giving a shit in book design manifests in many ways, but it
-manifests perhaps most in the margins.<br> — Craig Mod, [Let’s talk about
-margins](https://medium.com/message/lets-talk-about-margins-14646574c385)
+Some concepts live in the heart of data science. Eigenvectors and eigenvalues
+are one of those concepts. This article will aim to explain what eigenvectors
+and eigenvalues are, how they are calculated and how we can use them.
 
-Printing articles off of Medium might not be commonplace, but we want it to be a
-great experience. It is, perhaps, partly a nod to centuries of print history,
-mixed with a dash of nostalgia (a few of us at Medium designed for print some
-time ago, or still do in our rare spare time). It might be a desire to keep our
-craft sharp; after all, print is a form of responsive design. There are
-practical reasons, too — printing your draft, grabbing a pen, and going outside
-helps in looking your article very differently and making that last batch of
-corrections. We can imagine our writers doing that every so often.
+> Eigenvalues and eigenvectors form the basics of computing and mathematics
 
-But perhaps the most important reason is this: we respect what people write on
-our platform. We know writing is an often personal, rarely easy affair, and we
-want you to know we care. That we, to quote Craig Mod above, *give a shit.* The
-idea that printing could leave your words mangled or stories disfigured, felt
-like breaking our part of the deal we feel we have with everyone who writes and
-reads on Medium.
+#### Quick Introduction
 
-![](https://cdn-images-1.medium.com/max/800/1*bVycW_xvM83b3u3zGqInIA.png)
+**Eigenvector** —Every vector (list of numbers) has a direction when it is
+plotted on a XY chart. Eigenvectors are those vectors when a linear
+transformation (such as multiplying it to a scalar) is performed on them then
+their direction does not change. This attribute of Eigenvectors make them very
+valuable as I will explain in this article.
 
-❦
+**Eigenvalue**— The scalar that is used to transform (stretch) an Eigenvector.
 
-We wanted to design the best printing output we could given the technological
-support given by the browsers. Here are the most important changes between
-screen Medium and print Medium, illustrated using a fake article (you can [open
-that article](https://medium.com/@mwichary/printing-on-medium-3cd2d10e8e90)
-yourself if you want to follow along.)
+Eigenvectors and eigenvalues are used to reduce noise in data. They can help us
+improve efficiency in computational intensive tasks. They also eliminate
+features that have a strong correlation between them and also help in reducing
+over-fitting.
 
-![](https://cdn-images-1.medium.com/max/800/1*XGQ_ocD58uJU-Iy__-v_pg.png)
+![](https://cdn-images-1.medium.com/max/1600/0*un4JIg7hpd361bW9)
+<span class="figcaption_hack">Photo by
+[Helloquence](https://unsplash.com/@helloquence?utm_source=medium&utm_medium=referral)
+on [Unsplash](https://unsplash.com/?utm_source=medium&utm_medium=referral)</span>
 
-**No visible user interface. **We removed most of the user interface since it’s
-irrelevant in print. We also set up our stylesheets so that any future screen UI
-we might add or change will also be hidden by default.
+### Article Structure
 
-**Extra top margin.** We added a generous margin at the top of first page only,
-to leave room for possible handwritten annotations.
+* Firstly I will give a brief introduction of eigenvectors and eigenvalues.
+* Then I will explain how eigenvectors and eigenvalues are calculated but I will
+explain them from the foundation of matrix multiplication and addition so that
+we all can understand them thoroughly.
+* I will then present a working example and we will calculate the eigenvectors and
+eigenvalues together
+* Lastly I will outline how we can compute the eigenvectors and eigenvalues in
+Python.
 
-**Font size.** We adjusted the main font size down from 22px to 15px (and other
-font sizes accordingly) so that it is the most comfortable to read on typical
-paper sizes.
+> It will build our confidence in dimension reduction techniques which are crucial
+> to understand in data science
 
-**Page width. **We changed the maximum width of the main column to be 4.95" for
-the same comfortable number of characters (50–75) per line as on the screen.
-And, it leaves generous margins for your fingers (or your annotations) to rest
-on.
+### You are probably wondering why eigenvalues and eigenvectors
 
-We do it regardless of paper size: it will work for most typical portrait and
-landscape paper types, and we don’t want to waste time preparing for all the
-exotic possibilities. Note that we changed maximum width, not *actual width,* so
-that printing on pages smaller than 4.95" would still work without clipping.
+### Introducing Eigenvalues and Eigenvectors — Where are they used?
 
-**Each image on one page. **An image will be moved to the next page instead of
-being half on one page, and half on another.
+When we are building forecasting models that are trained on images, sound and/or
+textual contents then the input feature sets can end up having a large set of
+features. It is also difficult to understand and visualize data with more than 3
+dimensions. As a result, we often use one-hot encoding to transform values in
+textual features to separate numerical columns which can end up taking a large
+amount of space on disk.
 
-**Underlines. **We remove those underlines [we carefully put together for the
-screen](https://medium.com/designing-medium/crafting-link-underlines-on-medium-7c03a9274f9)
-— no reason to tire the eye with decorations that don’t make sense in print.
+> Eigenvalues and Eigenvectors are the key tools to use in those scenarios
 
-**Text colour. **The on-screen text in Medium [is not 100%
-black](http://ianstormtaylor.com/design-tip-never-use-black/), offering slightly
-lower contrast and an ability for pure black images to stand out more. However,
-we change the text colour to pure black for printing, since printers don’t do
-well with [dithering](https://en.wikipedia.org/wiki/Dither).
+Eigenvalues and Eigenvectors have their importance in linear differential
+equations where you want to find a rate of change or when you want to maintain
+relationships between two variables.
 
-**Background images.** This section has a background image and white text on the
-screen, but we remove the image in print. We can’t reliably print it since
-different browsers treat CSS background images differently in print, plus it
-would often be a great waste of ink or toner — not to mention making text harder
-to read.
+> Think of eigenvalues and eigenvectors as providing Summary of a large matrix
 
-**Orphans/widows.** Even though we could fit one of these two lines on the
-previous page, we don’t. We make sure it’s not possible for a solitary opening
-line to appear at the bottom of the page
-([orphan](http://en.wikipedia.org/wiki/Widows_and_orphans)) or closing line to
-appear at the top of the page (widow).
+We can represent a large set of information in a matrix. One eigenvalue and
+eigenvector is used to capture key information that is stored in a large matrix.
+Performing computations on a large matrix is a very slow process. To elaborate,
+one of the key methodologies to improve efficiency in computational intensive
+tasks is to reduce the dimensions after ensuring most of the key information is
+maintained.
 
-**Footer.** We keep only the interesting parts of the footer — no buttons to
-recommend or share (how would you use them on paper?), no follow actions.
+Component analysis is one of the key strategies that is utilised to reduce
+dimension space without losing valuable information. **The core of component
+analysis (PCA) is built on the concept of eigenvalues and eigenvectors.**
 
-❦
+Additionally, eigenvectors and eigenvalues are used in facial recognition
+techniques such as EigenFaces.
 
-Interested in some of the technical details of the above? Find them in the
-[technical supplement](https://medium.com/p/8f3c754626f2). Questions? Comments?
-Leave a note, email us at typography@medium.com, or tweet at us at
-[@MediumDesign](https://twitter.com/mediumdesign).
+> It is now apparent that Eigenvalues and Eigenvectors are one of core concepts to
+> understand in data science. Hence this article is dedicated to them.
 
-(We feel bad about wasting so much paper and generally try to avoid it… but
-needed to the below for debugging. Fortunately we only had to do it once.)
+### Practical usecases of Eigenvectors and Eigenvalues:
 
-#### ❦
+They are used to reduce dimension space. If you want to forecast a financial
+variable e.g.interest rates then you will gather data for variables that
+interest rate is dependent on. Then you will join the variables to create a
+matrix. You might also be loading textual information and converting it to
+vectors.
 
-*Thanks to Gianni Chen for being my co-pilot on this project, and to Craig Mod
-for feedback and inspiration.*
+At times, this can increase your dimension space to 100+ columns.
 
-*In the Medium typography series, we previously covered
-*[underlines](https://medium.com/designing-medium/crafting-link-underlines-on-medium-7c03a9274f9)*,
-*[hanging
-quotes](https://medium.com/designing-medium/ive-been-asked-to-report-to-this-office-efc664bcbc5f)*,
-*[Whitespace](https://medium.com/designing-medium/whitespace-8b92273ab49e),*
-*[pilcrows](https://medium.com/designing-medium/first-in-first-out-the-pilcrows-strange-typographic-history-3ab4f645a36)*,
-and *[Polish
-S](https://medium.com/medium-eng/the-curious-case-of-disappearing-polish-s-fa398313d4df)*.*
-*Are we missing something interesting? Want to know more? Email us at
-*[typography@medium.com](mailto:typography@medium.com)*.*
+The technique of Eigenvectors and Eigenvalues are used to compress the data.
 
-* [Typography](https://medium.design/tagged/typography?source=post)
-* [Medium](https://medium.design/tagged/medium?source=post)
-* [Printing](https://medium.design/tagged/printing?source=post)
+Many algorithms such as PCA rely on eigen values and eigenvectors to reduce the
+dimensions.
 
-### [Marcin Wichary](https://medium.design/@mwichary)
+Have a look at this article if you want to understand dimension reduction and
+PCA:
 
-Designer/typographer · Writing a book on the history of keyboards:
-[https://aresluna.org/shift-happens](https://aresluna.org/shift-happens)
+<span class="figcaption_hack">Photo by [Joel
+Filipe](https://unsplash.com/@joelfilip?utm_source=medium&utm_medium=referral)
+on [Unsplash](https://unsplash.com/?utm_source=medium&utm_medium=referral)</span>
 
-### [Designing Medium](https://medium.design/?source=footer_card)
+### More usecases of Eigenvalues and Eigenvectors
 
-Stories from Medium’s design and research team
+Occasionally we gather data that contains a large amount of noise. Finding
+important or meaningful patterns within the data can be extremely difficult.
+Eigenvectors and eigenvalues can be used to construct spectral clustering.
 
-But they’re not decoration…they’re part of the content and the content loses
-something by not including them. (I’m not suggesting that an underline on its
-own would suffice, but leaving some fragment of the old affordance helps
-signpost author intent just as numbered foot/end notes do.) In a perfect world
-the links would be rendered as some form of note :-)
+We can also use eigenvector to rank items in a dataset.
 
-But HOW can we print with all these wonderful features? I print from Chrome and
-I get a tiny column in the middle of the page, or I get 36 pages.
+Lastly in non-linear motion dynamics, eigenvalues and eigenvectors can be used
+to help us understand the data better as they can be used to transform and
+represent data into manageable sets.
 
-It’s been a while since I wrote this piece, and a while since I worked at
-Medium. It might have broken since. Perhaps worth contacting Medium support?
+### What are Eigenvalues and Eigenvectors?
+
+Eigenvectors are used to make linear transformation understandable. Think of
+eigenvectors as stretching/compressing a X-Y line chart without changing its
+direction.
+
+> Eigenvectors and eigenvalues revolve around the concept of matrices.
+
+Matrices are used in machine learning problems to represent a large set of
+information. Eigenvalues and eigenvectors is about constructing one vector with
+one value to represent a large matrix. Sounds very useful, right?
+
+#### Let’s quickly recap and refresh how matrix multiplication and addition works
+before we take a deep dive
+
+#### Matrix Addition
+
+Matrix addition is simply achieved by taking each element of a matrix and adding
+it together as shown below:
+
+![](https://cdn-images-1.medium.com/max/1600/1*i8_lG1Wq2q5Im0OFvWW_BQ.png)
+
+#### Multiplying Scalar With A Matrix
+
+Multiplying Matrix by a scalar is as straight forward as multiplying each
+element by the scalar:
+
+![](https://cdn-images-1.medium.com/max/1600/1*E7x0smkNrGplqb0YhDRZFA.png)
+
+#### Matrices Multiplication
+
+Matrices multiplication is achieved by multiplying and then summing matching
+members of the two matrices. The image below illustrates how we can multiple a 3
+by 3 and a 3 by 1 matrix together:
+
+> That’s all the Maths which we need to know for the moment
+
+#### Let’s utilise the knowledge above to understand eigenvectors and eigenvalues:
+
+> Although we don’t have to calculate the Eigenvalues and Eigenvectors by hand
+> every time but it is important to understand the inner workings to be able to
+confidently use the algorithms.
+
+#### Key Concepts: Let’s go over the following bullet points before we calculate
+Eigenvalues and Eigenvectors
+
+Eigenvalues and Eigenvectors have following components:
+
+* A matrix has a size of X rows and Y columns.
+* A square matrix is the one which has a size of n, implying that X and Y are
+equal.
+* Square matrix is represented as **A. **This is an example of a square matrix
+
+![](https://cdn-images-1.medium.com/max/1600/1*OBDgTXEUlUt3wfKblp47BQ.png)
+
+* Eigenvector is an array with n entries where n is the number of rows (or
+columns) of a square matrix. Eigenvector is represented as **x. Key Note: The
+direction of an eigenvector does not change when a linear transformation is
+applied to it.**
+* Therefore, Eigenvector should be a non-null vector
+* **Now Eigenvalues: **We are required to find a number of values, known as
+eigenvalues such that
+
+     * 
+
+**Eigenvalues are represented as lambda.**
+
+The above equation states that we need to multiply a scalar lambda (eigenvalue)
+to the vector **x** such that it is equal to the linear transformation of matrix
+**A** once it is scaled by vector **x **(eigenvector).
+
+**Key note: The above equation should not be invertible.**
+
+* Determinant of a matrix is a number that is computed from a square matrix. It is
+basic arithmetic where the diagonal elements are multiplied by each other and
+then they are substracted together. As the above equation should not be
+invertible, we need to ensure that the determinant of the matrix is 0.
+* **Last component: Identity Matrix. **A square matrix which has 1 as diagonal and
+all other elements are 0 is known as an identity matrix.** Identity matrix** is
+represented as **I:**
+
+![](https://cdn-images-1.medium.com/max/1600/1*LMvVzGqj7hJJv-Fyna7WqQ.png)
+
+We can represent
+
+     * 
+
+as
+
+
+Additionally
+
+
+### How do I calculate Eigenvalue?
+
+For a matrix A of size n, find Eigenvalues of size n.
+
+The aim is to find: Eigenvector and Eigenvalues of A such that:
+
+     A * Eigenvector — Eigenvalue * EigenVector = 0
+
+#### Find Lambda Such that Determinant(A — Lambda * I) = 0
+
+Based on the concepts learnt above:
+
+1. **Lambda * I** is:
+
+![](https://cdn-images-1.medium.com/max/1600/1*bIQMbqKHI5OM_wnGsnq9bw.png)
+
+If A is:
+
+![](https://cdn-images-1.medium.com/max/1600/1*KcNyn2BW__twG3ITnjj0-w.png)
+
+2. Then **A — Lambda * I** is:
+
+![](https://cdn-images-1.medium.com/max/1600/1*OpsOYzopms_iwU8ESsdXTg.png)
+
+**3. Finally calculate the determinant of (A-Lambda*I) as:**
+
+![](https://cdn-images-1.medium.com/max/1600/1*EGGlvpfv4ICf1IVyOMlr9A.png)
+
+**Once we solve the equation above, we will get the values of Lambda. These
+values are the Eigenvalues.**
+
+I will present a working example below to ensure we understand the concepts
+thoroughly.
+
+### How do I calculate Eigenvector?
+
+Once we have calculated eigenvalues, we can calculate the Eigenvectors of the
+matrix *A* by using Gaussian Elimination. Gaussian elimination is about
+converting the matrix to **row echelon form**. Finally it is about solving the
+linear system by back substitution.
+
+*Detailed explanation of gaussian elimination is out of scope of this article so
+that we can concentrate on Eigenvalues and Eigenvectors.*
+
+Once we have the Eigenvalues, we can find Eigenvector for each of the
+Eigenvalues. We can substitute the eigenvalue in the lambda and we will achieve
+an eigen vector.
+
+
+Therefore if a square matrix has a size n then we will get n eigenvalues and as
+a result, n eigenvectors will be computed to represent the matrix.
+
+> Now that we have the key, it is the time to compute the Eigenvalues and
+> Eigenvectors together with me
+
+<span class="figcaption_hack">Photo by [CMDR
+Shane](https://unsplash.com/@cmdrshane?utm_source=medium&utm_medium=referral) on
+[Unsplash](https://unsplash.com/?utm_source=medium&utm_medium=referral)</span>
+
+### Let’s calculate Eigenvalue and Eigenvector together
+
+*If there are any doubts then do inform me.*
+
+Let’s find eigenvalue of following matrix:
+
+![](https://cdn-images-1.medium.com/max/1600/1*4htJZnnvPc6CLad3IqPLbw.png)
+
+First multiply lambda to an identity matrix and then subtract the two matrices
+
+![](https://cdn-images-1.medium.com/max/1600/1*5XDc5OiKldso7a1cPzhCQQ.png)
+
+We will then be left with a matrix which we need to compute a determinant of:
+
+![](https://cdn-images-1.medium.com/max/1600/1*eZSqgvsRvB8-sahbKqseGQ.png)
+
+Find determinant of the following matrix:
+
+![](https://cdn-images-1.medium.com/max/1600/1*EwH4NKJU-A3X0UE3VlYv2Q.png)
+
+Once we solve the quadratic equation above, we will be left with two
+Eigenvalues:
+
+![](https://cdn-images-1.medium.com/max/1600/1*pT5Il4QZ7pFttwWjWvR7RA.png)
+
+### Now that we have computed Eigenvalues, let’s calculate Eigenvectors together
+
+Take the first Eigenvalue (Lambda) and substitute the eigenvalue into following
+equation:
+
+
+For the first eigenvalue, we will get following Eigenvector:
+
+![](https://cdn-images-1.medium.com/max/1600/1*AKrPdfFcTiy9_5ie_utp-A.png)
+
+*This Eigenvector now represents the key information of matrix A*
+
+> I want you to find the second Eigenvector.
+
+> Message me your values and workings.
+
+### Calculate Eigenvalues and Eigenvectors In Python
+
+Although we don’t have to calculate the Eigenvalues and Eigenvectors by hand but
+it is important to understand the inner workings to be able to confidently use
+the algorithms. Furthermore, It is very straightforward to calculate eigenvalues
+and eigenvectors in Python.
+
+We can use **numpy.linalg.eig** module. It takes in a square matrix as the input
+and returns eigen values and eigen vectors. It also raises an **LinAlgError **if
+the eigenvalue computation does not converge.
+
+     
+     
+     linalg 
+     LA
+
+
+    w, v = LA.eig(input)
+
+### Summary
+
+This article explained one of the key areas of machine learning. It started by
+giving a brief introduction of eigenvectors and eigenvalues.
+
+Then it explained how eigenvectors and eigenvalues are calculated from the
+foundations of matrix multiplication and addition so that we can understand the
+key components thoroughly.
+
+It then presented a working example. Lastly it outlined how we can compute the
+eigenvectors and eigenvalues in Python.
+
+Hope it helps. Please let me know if you have any questions or feedback.
